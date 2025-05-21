@@ -1,0 +1,59 @@
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin4:
+
+services:
+  postgres:
+    image: bitnami/postgresql:17
+    restart: always
+    environment:
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: 12345678
+      POSTGRESQL_DATABASE: round-squares
+      POSTGRESQL_INITDB_ARGS: '--data-checksums'
+      POSTGRESQL_TIMEZONE: "Europe/Moscow"
+      TZ: "Europe/Moscow"
+      PGTZ: "Europe/Moscow"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    ports:
+      - "5432:5432"
+
+  pgadmin4:
+    image: dpage/pgadmin4:9.2
+    restart: always
+    environment:
+      PGADMIN_LISTEN_PORT: 8088
+      PGADMIN_DEFAULT_EMAIL: "example@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "QweAsdZxc321"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_UPGRADE_CHECK_ENABLED: "False"
+      PGADMIN_CONFIG_CHECK_SUPPORTED_BROWSER: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 6
+      PGADMIN_CONFIG_LANGUAGES: '{''ru'': ''Russian''}'
+      PGADMIN_TIMEZONE: "Europe/Moscow"
+      TZ: "Europe/Moscow"
+      PGTZ: "Europe/Moscow"
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+      - ./pgpassfile:/pgadmin4/pgpassfile
+      - pgadmin4:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - "postgres:postgres"
+    ports:
+      - "${PGADMIN_PORT:-8088}:8088"

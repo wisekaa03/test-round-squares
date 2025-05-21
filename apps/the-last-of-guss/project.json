@@ -1,0 +1,9 @@
+{
+  "name": "the-last-of-guss",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/the-last-of-guss",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project the-last-of-guss --web",
+  "targets": {}
+}
