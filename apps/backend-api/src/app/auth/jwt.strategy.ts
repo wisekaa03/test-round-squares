@@ -1,5 +1,5 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 
 import type { RoundSquaresJwtPayload } from '../interfaces/jwt.payload';
@@ -21,7 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: RoundSquaresJwtPayload): Promise<UserEntity> {
+  async validate(payload: RoundSquaresJwtPayload): Promise<UserEntity | null> {
+    if (!payload.sub) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
+
     return this.userService.findById(payload.sub);
   }
 }

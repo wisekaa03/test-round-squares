@@ -35,7 +35,7 @@ export class AuthService {
     }
     const { password: passwordToCheck, ...user } = userFind;
 
-    const valid = AuthService.validateCredentials(passwordToCheck, password);
+    const valid = AuthService.validateCredentials(passwordToCheck ?? '', password);
     if (!valid) {
       throw new ForbiddenException('Неверный логин или пароль');
     }

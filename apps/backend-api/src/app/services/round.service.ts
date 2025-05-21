@@ -10,8 +10,8 @@ import { RoundViewEntity } from '@/database/round.view';
 export class RoundService {
   private logger = new Logger(RoundService.name);
 
-  private readonly ROUND_DURATION = this.configService.get<number>('ROUND_DURATION') * 1000;
-  private readonly COOLDOWN_DURATION = this.configService.get<number>('COOLDOWN_DURATION') * 1000;
+  private readonly ROUND_DURATION = this.configService.get<number>('ROUND_DURATION', 60) * 1000;
+  private readonly COOLDOWN_DURATION = this.configService.get<number>('COOLDOWN_DURATION', 30) * 1000;
 
   constructor(
     private readonly configService: ConfigService,

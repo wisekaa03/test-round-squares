@@ -1,14 +1,13 @@
 import dayjs from 'dayjs';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindOneOptions, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
+import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { TapEntity } from '@/database/tap.entity';
 import { TapRequest, TapResponse } from '@/dto';
 import { UserEntity } from '@/database/user.entity';
 import { RoundEntity } from '@/database/round.entity';
 import 'dayjs/plugin/utc';
-import { date } from 'joi';
 
 dayjs.extend(require('dayjs/plugin/utc'));
 
@@ -16,8 +15,8 @@ dayjs.extend(require('dayjs/plugin/utc'));
 export class TapService {
   private logger = new Logger(TapService.name);
 
-  private readonly ROUND_DURATION = this.configService.get<number>('ROUND_DURATION') * 1000;
-  private readonly COOLDOWN_DURATION = this.configService.get<number>('COOLDOWN_DURATION') * 1000;
+  private readonly ROUND_DURATION = this.configService.get<number>('ROUND_DURATION', 60) * 1000;
+  private readonly COOLDOWN_DURATION = this.configService.get<number>('COOLDOWN_DURATION', 30) * 1000;
 
   constructor(
     private readonly configService: ConfigService,
@@ -91,7 +90,10 @@ export class TapService {
         select: { id: true, tap: true, score: true, round: { id: true, score: true } },
       });
     });
+    if (!tapEntity) {
+      throw new InternalServerErrorException('Тап не найден');
+    }
 
-    return { tap: tapEntity.tap, score: tapEntity.score, roundScore: tapEntity.round.score };
+    return { tap: tapEntity.tap, score: tapEntity.score, roundScore: tapEntity.round?.score || 0 };
   }
 }

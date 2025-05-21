@@ -1,4 +1,4 @@
-import { Body, Get, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Get, Logger, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { LoginRequest, RegisterRequest, AuthResponse, User } from '@/dto';
@@ -30,6 +30,9 @@ export class AuthController {
     type: User,
   })
   async authorization(@Req() { user }: FastifyRequest): Promise<User> {
+    if (!user) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
     return user;
   }
 
