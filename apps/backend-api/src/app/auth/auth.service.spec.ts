@@ -15,15 +15,21 @@ describe(AuthService.name, () => {
   let service: AuthService;
   let userService: UserService;
 
-  const email = 'foo@bar.baz';
+  const name = 'Admin';
   const password = 'Secret~123456';
   const token = 'token';
 
-  let user: UserEntity;
+  const user: UserEntity = {
+    id: '1',
+    name,
+    role: 'admin',
+    password,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   const mockRepository = jest.fn(() => ({
     find: async () => Promise.resolve([]),
-    findByEmail: async () => Promise.resolve({ ...user, password }),
     findById: async () => Promise.resolve({ ...user, password }),
     findOne: async () => Promise.resolve(user),
     signAsync: async () => Promise.resolve(token),
@@ -53,6 +59,7 @@ describe(AuthService.name, () => {
         UserService,
       ],
     }).compile();
+    service = module.get<AuthService>(AuthService);
   });
 
   test('should be defined', () => {
@@ -60,7 +67,7 @@ describe(AuthService.name, () => {
   });
 
   test('login', async () => {
-    const login = await service.login(email, password);
+    const login = await service.login(name, password);
     expect(login).toBeDefined();
   });
 });

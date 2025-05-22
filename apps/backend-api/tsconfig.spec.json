@@ -4,9 +4,18 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "moduleResolution": "node10",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "paths": {
+      "@/": [
+        "./apps/backend-api/src/app/"
+      ],
+      "@/*": [
+        "./apps/backend-api/src/app/*"
+      ]
+    }
   },
   "include": [
+    "typings",
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",

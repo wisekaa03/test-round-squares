@@ -1,4 +1,5 @@
 import { Reflector } from '@nestjs/core';
+import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, UseGuards } from '@nestjs/common';
 import { GUARDS_METADATA } from '@nestjs/common/constants';
 
@@ -34,7 +35,7 @@ describe(RolesGuard.name, () => {
 
   it('decorator', () => {
     const userService = createMock<UserService>();
-    rolesGuard = new RolesGuard(reflector, userService);
+    rolesGuard = new RolesGuard(reflector);
     expect(rolesGuard).toBeDefined();
   });
 
