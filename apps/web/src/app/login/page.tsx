@@ -14,7 +14,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
 
-import { useAuthStore } from '../store/auth';
+import { swaggerApi } from '@web/api/api-instance';
+import { setUserName, setUserId, setToken } from '../store/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -55,10 +56,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const Login = (props: { disableCustomTheme?: boolean }) => {
-  const httpServer = process.env.HTTP_SERVER;
   const router = useRouter();
-  const setLoggedIn = useAuthStore((state) => state.setAuthenticated);
-  const setToken = useAuthStore((state) => state.setToken);
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -66,29 +64,26 @@ const Login = (props: { disableCustomTheme?: boolean }) => {
   const [onLoading, setOnLoading] = React.useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setOnLoading(true);
-    event.preventDefault();
     if (nameError || passwordError) {
       return;
     }
-    const data = new FormData(event.currentTarget);
-    const res = await fetch(`${httpServer}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: data.get('name'),
-        password: data.get('password'),
-      }),
-    });
+    setOnLoading(true);
+    event.preventDefault();
 
-    if (res.ok) {
-      setLoggedIn(true);
-      const json = await res.json();
-      setToken(json.token);
+    const data = new FormData(event.currentTarget);
+    const name = data.get('name') as string;
+    const password = data.get('password') as string;
+    try {
+      const authResponse = await swaggerApi.api.authLogin({ name, password });
+      setToken(authResponse.data.payload.token);
+      setUserName(authResponse.data.data.name);
+      setUserId(authResponse.data.data.id);
       router.push('/');
-    } else {
+    } catch (error) {
       setPasswordError(true);
       setPasswordErrorMessage('Неверный пароль.');
+    } finally {
+      setOnLoading(false);
     }
   };
 

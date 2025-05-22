@@ -4,11 +4,12 @@ import { Token } from '@api/interfaces/token';
 import { User } from './user.response';
 
 export class AuthenticationPayload {
-  @ApiProperty({ description: 'Тип: Bearer', example: 'bearer' })
+  @ApiProperty({ description: 'Тип: Bearer', type: 'string', example: 'bearer' })
   type!: 'bearer';
 
   @ApiProperty({
     description: 'Токен, используемый в Authorization: Bearer',
+    type: 'string',
     example: 'eyJcbGciOcJIUcI1xxxxxxxxxxxxxxxx',
   })
   token!: Token;
