@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository, type DeepPartial } from 'typeorm';
 
 import { UserEntity } from '@api/database/user.entity';
-import { RegisterRequest } from '@api/dto';
+import { LoginRequest } from '@api/dto';
 
 @Injectable()
 export class UserService {
@@ -29,10 +29,10 @@ export class UserService {
   /**
    * Заводит нового пользователя
    * @async
-   * @param {RegisterRequest} create
+   * @param {LoginRequest} create
    * @returns {UserEntity} Пользователь
    */
-  async register(create: RegisterRequest): Promise<UserEntity> {
+  async register(create: LoginRequest): Promise<UserEntity> {
     const { name, password } = create;
     if (!name) {
       throw new BadRequestException('Не указано имя');

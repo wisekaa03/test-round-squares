@@ -1,7 +1,7 @@
 import { Body, Get, Logger, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-import { LoginRequest, RegisterRequest, AuthResponse, User } from '@api/dto';
+import { LoginRequest, AuthResponse, User } from '@api/dto';
 import { ApiComplex } from '@api/decorators/api-complex.decorator';
 import { JwtAuthGuard } from '@api/guards/jwt-auth.guard';
 import { AuthService } from '../auth/auth.service';
@@ -12,10 +12,7 @@ import { FastifyRequest } from 'fastify';
 export class AuthController {
   logger = new Logger(AuthController.name);
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -52,27 +49,6 @@ export class AuthController {
     return {
       payload,
       data,
-    };
-  }
-
-  @Post('register')
-  @ApiOperation({
-    operationId: 'auth-register',
-    summary: 'Регистрация пользователя',
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Успешный ответ',
-    type: AuthResponse,
-  })
-  async register(@Body() body: RegisterRequest): Promise<AuthResponse> {
-    const user = await this.userService.register(body);
-    const token = await this.authService.generateAccessToken(user);
-    const payload = this.authService.buildResponsePayload(token);
-
-    return {
-      payload,
-      data: user,
     };
   }
 }

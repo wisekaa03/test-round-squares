@@ -89,24 +89,6 @@ export interface AuthResponse {
   data: User;
 }
 
-export interface RegisterRequest {
-  /**
-   * Имя
-   * @maxLength 50
-   * @example "John"
-   */
-  name?: string;
-  /**
-   * Пароля пользователя (должен удовлетворять минимальным требованиям)
-   * @minLength 8
-   * @maxLength 32
-   * @pattern /((?=.*d)|(?=.*W+))(?![.
-   * ])(?=.*[A-Z])(?=.*[a-z]).*$/
-   * @example "Secret~12345678"
-   */
-  password: string;
-}
-
 export interface TapRequest {
   /**
    * Раунд ID
@@ -442,33 +424,6 @@ export class Api<
         | InternalServerErrorException
       >({
         path: `/api/auth/login`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags auth
-     * @name AuthRegister
-     * @summary Регистрация пользователя
-     * @request POST:/api/auth/register
-     */
-    authRegister: (data: RegisterRequest, params: RequestParams = {}) =>
-      this.request<
-        AuthResponse,
-        | BadRequestException
-        | UnauthorizedException
-        | ForbiddenException
-        | NotFoundException
-        | NotAcceptableException
-        | ConflictException
-        | InternalServerErrorException
-      >({
-        path: `/api/auth/register`,
         method: "POST",
         body: data,
         type: ContentType.Json,

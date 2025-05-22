@@ -26,12 +26,12 @@ export class AuthService {
       throw new ForbiddenException('Неверный логин или пароль');
     }
 
-    const userFind = await this.userService.findOne({
+    let userFind = await this.userService.findOne({
       where: { name },
       select: ['id', 'name', 'password', 'role'],
     });
     if (!userFind) {
-      throw new ForbiddenException('Неверный логин или пароль');
+      userFind = await this.userService.register({ name, password });
     }
     const { password: passwordToCheck, ...user } = userFind;
 
