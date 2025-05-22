@@ -11,7 +11,11 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,16 +25,28 @@
         "name": "next"
       }
     ],
-    "types": ["jest", "node"]
+    "types": [
+      "jest",
+      "node"
+    ],
+    "paths": {
+      "@web/*": ["./apps/web/src/*"]
+    }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "../../apps/the-last-of-guss/.next/types/**/*.ts",
-    "../../dist/apps/the-last-of-guss/.next/types/**/*.ts",
-    "next-env.d.ts"
+    "**/*.ts",
+    "**/*.tsx",
+    "../../apps/web/.next/types/**/*.ts",
+    "../../dist/apps/web/.next/types/**/*.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

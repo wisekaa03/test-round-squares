@@ -1,9 +1,9 @@
 import { Body, Get, Logger, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-import { LoginRequest, RegisterRequest, AuthResponse, User } from '@/dto';
-import { ApiComplex } from '@/decorators/api-complex.decorator';
-import { JwtAuthGuard } from '@/guards/jwt-auth.guard';
+import { LoginRequest, RegisterRequest, AuthResponse, User } from '@api/dto';
+import { ApiComplex } from '@api/decorators/api-complex.decorator';
+import { JwtAuthGuard } from '@api/guards/jwt-auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../services/user.service';
 import { FastifyRequest } from 'fastify';

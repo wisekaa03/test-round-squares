@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { RoundViewEntity } from '@/database/round.view';
+import { RoundViewEntity } from '@api/database/round.view';
 
 export class RoundWinner extends RoundViewEntity {}
 

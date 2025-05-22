@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
   const configService = app.get(ConfigService);
   const globalPrefix = configService.getOrThrow('API_PREFIX');
-  const port = configService.getOrThrow('PORT');
+  const port = configService.getOrThrow('PORT_API');
   const staticAssets = pathJoin(`${__dirname}/../assets`);
   app.useStaticAssets({ root: staticAssets, dotfiles: 'deny' }).setGlobalPrefix(globalPrefix).enableShutdownHooks();
 

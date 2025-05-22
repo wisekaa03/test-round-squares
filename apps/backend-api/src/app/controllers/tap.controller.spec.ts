@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TapController } from './tap.controller';
-import { TapService } from '@/services/tap.service';
+import { TapService } from '@api/services/tap.service';
 
 describe('TapController', () => {
   let controller: TapController;

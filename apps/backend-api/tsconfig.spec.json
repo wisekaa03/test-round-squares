@@ -6,10 +6,10 @@
     "moduleResolution": "node10",
     "types": ["jest", "node"],
     "paths": {
-      "@/": [
+      "@api/": [
         "./apps/backend-api/src/app/"
       ],
-      "@/*": [
+      "@api/*": [
         "./apps/backend-api/src/app/*"
       ]
     }

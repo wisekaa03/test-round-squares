@@ -1,7 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { DataSource, SelectQueryBuilder, ViewColumn, ViewEntity } from 'typeorm';
+
 import { RoundEntity } from './round.entity';
 import { TapEntity } from './tap.entity';
-import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
 
 @ViewEntity({

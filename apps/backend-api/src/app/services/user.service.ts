@@ -3,8 +3,9 @@ import { slugify } from 'transliteration';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository, type DeepPartial } from 'typeorm';
-import { UserEntity } from '../database/user.entity';
-import { RegisterRequest } from '../dto';
+
+import { UserEntity } from '@api/database/user.entity';
+import { RegisterRequest } from '@api/dto';
 
 @Injectable()
 export class UserService {

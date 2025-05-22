@@ -1,3 +1,3 @@
-import { RoundEntity } from '@/database/round.entity';
+import { RoundEntity } from '@api/database/round.entity';
 
 export class Round extends RoundEntity {}

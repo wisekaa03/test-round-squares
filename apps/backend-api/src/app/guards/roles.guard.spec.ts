@@ -3,8 +3,8 @@ import { createMock } from '@golevelup/ts-jest';
 import { ExecutionContext, UseGuards } from '@nestjs/common';
 import { GUARDS_METADATA } from '@nestjs/common/constants';
 
-import { Roles } from '../decorators/roles.decorator';
-import { UserService } from '../services/user.service';
+import { Roles } from '@api/decorators/roles.decorator';
+import { UserService } from '@api/services/user.service';
 import { RolesGuard } from './roles.guard';
 
 export const mockRepository = jest.fn(() => ({

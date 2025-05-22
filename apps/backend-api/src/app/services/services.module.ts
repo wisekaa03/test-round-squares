@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { DatabaseModule } from '../database/database.module';
-import { AuthModule } from '../auth/auth.module';
 
+import { DatabaseModule } from '@api/database/database.module';
+import { AuthModule } from '@api/auth/auth.module';
 import { UserService } from './user.service';
 import { RoundService } from './round.service';
 import { TapService } from './tap.service';

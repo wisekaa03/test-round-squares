@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
+import 'dayjs/plugin/utc';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
-import { TapEntity } from '@/database/tap.entity';
-import { TapRequest, TapResponse } from '@/dto';
-import { UserEntity } from '@/database/user.entity';
-import { RoundEntity } from '@/database/round.entity';
-import 'dayjs/plugin/utc';
+
+import { TapRequest, TapResponse } from '@api/dto';
+import { TapEntity } from '@api/database/tap.entity';
+import { UserEntity } from '@api/database/user.entity';
+import { RoundEntity } from '@api/database/round.entity';
 
 dayjs.extend(require('dayjs/plugin/utc'));
 

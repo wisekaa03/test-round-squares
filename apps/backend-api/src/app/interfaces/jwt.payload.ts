@@ -1,6 +1,6 @@
 import type { JwtPayload } from 'jsonwebtoken';
 
-import { UserEntity } from '../database/user.entity';
+import { UserEntity } from '@api/database/user.entity';
 
 export const JWT_BASE_OPTIONS = {};
 

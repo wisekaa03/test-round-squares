@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RoundController } from './round.controller';
-import { RoundService } from '@/services/round.service';
+import { RoundService } from '@api/services/round.service';
 
 describe('RoundController', () => {
   let controller: RoundController;

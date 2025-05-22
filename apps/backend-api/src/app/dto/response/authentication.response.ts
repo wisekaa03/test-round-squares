@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Token } from '../../interfaces/token';
+import { Token } from '@api/interfaces/token';
 import { User } from './user.response';
 
 export class AuthenticationPayload {

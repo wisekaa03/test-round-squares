@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsDefined, IsNotEmpty, Matches, MaxLength, MinLength } from 'class-validator';
 
-import { UserEntity } from '../../database/user.entity';
+import { UserEntity } from '@api/database/user.entity';
 
 export class LoginRequest extends PickType(UserEntity, ['name', 'password']) {
   @ApiProperty({

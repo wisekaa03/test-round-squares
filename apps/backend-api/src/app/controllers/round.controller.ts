@@ -1,9 +1,9 @@
 import { Get, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Round, Rounds } from '@/dto';
-import { RoundService } from '@/services/round.service';
-import { ApiComplex, Roles } from '@/decorators';
-import { JwtAuthGuard, RolesGuard } from '@/guards';
+import { Round, Rounds } from '@api/dto';
+import { RoundService } from '@api/services/round.service';
+import { ApiComplex, Roles } from '@api/decorators';
+import { JwtAuthGuard, RolesGuard } from '@api/guards';
 
 @ApiComplex({ path: ['round'], roles: ['*'] })
 export class RoundController {

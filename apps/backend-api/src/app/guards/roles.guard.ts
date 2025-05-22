@@ -2,7 +2,7 @@ import type { FastifyRequest } from 'fastify';
 import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { Roles } from '../decorators/roles.decorator';
+import { Roles } from '@api/decorators/roles.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

@@ -1,10 +1,11 @@
+import { FindOneOptions, Repository, type DeepPartial } from 'typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository, type DeepPartial } from 'typeorm';
-import dayjs from 'dayjs';
-import { RoundEntity } from '@/database/round.entity';
 import { ConfigService } from '@nestjs/config';
-import { RoundViewEntity } from '@/database/round.view';
+import dayjs from 'dayjs';
+
+import { RoundEntity } from '@api/database/round.entity';
+import { RoundViewEntity } from '@api/database/round.view';
 
 @Injectable()
 export class RoundService {

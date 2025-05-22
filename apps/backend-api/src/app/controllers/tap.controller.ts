@@ -2,9 +2,9 @@ import { Body, Logger, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 
-import { ApiComplex } from '@/decorators';
-import { TapRequest, TapResponse } from '@/dto';
-import { TapService } from '@/services/tap.service';
+import { ApiComplex } from '@api/decorators';
+import { TapRequest, TapResponse } from '@api/dto';
+import { TapService } from '@api/services/tap.service';
 
 @ApiComplex({ path: ['tap'], roles: ['*'] })
 export class TapController {

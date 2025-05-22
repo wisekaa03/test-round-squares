@@ -8,10 +8,10 @@
     "emitDecoratorMetadata": true,
     "target": "es2021",
     "paths": {
-      "@/": [
+      "@api/": [
         "./apps/backend-api/src/app/"
       ],
-      "@/*": [
+      "@api/*": [
         "./apps/backend-api/src/app/*"
       ]
     }
