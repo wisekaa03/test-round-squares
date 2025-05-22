@@ -12,6 +12,9 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+
+import { useAuthStore } from '../store/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -51,24 +54,42 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
+const Login = (props: { disableCustomTheme?: boolean }) => {
+  const httpServer = process.env.HTTP_SERVER;
+  const router = useRouter();
+  const setLoggedIn = useAuthStore((state) => state.setAuthenticated);
+  const setToken = useAuthStore((state) => state.setToken);
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [onLoading, setOnLoading] = React.useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setOnLoading(true);
+    event.preventDefault();
     if (nameError || passwordError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      password: data.get('password'),
+    const res = await fetch(`${httpServer}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.get('name'),
+        password: data.get('password'),
+      }),
     });
-    event.preventDefault();
+
+    if (res.ok) {
+      setLoggedIn(true);
+      const json = await res.json();
+      setToken(json.token);
+      router.push('/');
+    } else {
+      setPasswordError(true);
+      setPasswordErrorMessage('Неверный пароль.');
+    }
   };
 
   const validateInputs = () => {
@@ -159,4 +180,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       </Card>
     </SignInContainer>
   );
-}
+};
+
+export default Login;
