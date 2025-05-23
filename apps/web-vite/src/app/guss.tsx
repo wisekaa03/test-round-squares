@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
@@ -6,45 +6,49 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AppBar, Card, CardContent, CardMedia, Container, Grid, Toolbar } from '@mui/material';
 
+import dayjs from '../dayjs-setup';
 import { authStore } from '../store/auth';
+import { timeStore } from '../store/time';
 import { gussStore } from '../store/guss';
 
 const GussComponent = (props: { disableCustomTheme?: boolean }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!authStore.isLoggedIn) {
       navigate('/login');
     }
   }, [navigate]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (id) {
       gussStore.getTap(id);
     }
   }, [id]);
 
-  const { status, score, roundScore, winnerUserName } = gussStore.guss;
-  const { startTime, endTime } = gussStore;
-  let firstString, secondString, thirdString;
+  const { status, score, roundScore, winnerUserName, startTime, endTime } = gussStore.guss;
+  let firstString, secondString, thirdString, cursor;
 
   if (status === 'Активный') {
     firstString = 'Раунд активен!';
-    secondString = `До конца осталось: ${endTime?.toDate().toLocaleString('ru-RU')}`;
+    secondString = `До конца осталось: ${dayjs.duration(dayjs(endTime).diff(timeStore.now)).format('mm:ss')}`;
     thirdString = `Мои очки: ${score}`;
+    cursor = 'pointer';
   } else if (status === 'Cooldown') {
     firstString = 'Cooldown';
-    secondString = `До начала раунда осталось: ${startTime?.toDate().toLocaleString('ru-RU')}`;
+    secondString = `До начала раунда осталось: ${dayjs.duration(dayjs(startTime).diff(timeStore.now)).format('mm:ss')}`;
     thirdString = '';
+    cursor = 'wait';
   } else {
     firstString = `Всего: ${roundScore}`;
     secondString = `Победитель: ${winnerUserName || 'Не определен'}`;
     thirdString = `Мои очки: ${score}`;
+    cursor = 'wait';
   }
 
   const tap = () => {
-    if (id) {
+    if (id && cursor === 'pointer') {
       gussStore.tap(id);
     }
   };
@@ -64,7 +68,7 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
         <Grid container direction="column" sx={{ justifyContent: 'center', alignItems: 'center' }}>
           <Card sx={{ maxWidth: 545, width: 545 }}>
             <CardMedia
-              sx={{ height: 440, cursor: 'pointer' }}
+              sx={{ height: 440, cursor }}
               image="krutoi-gus.webp"
               title="Виртуальный гусь, подхвативший мутацию G-42"
               onClick={tap}

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,7 +29,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!authStore.isLoggedIn) {
       navigate('/login');
     }
@@ -40,7 +40,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
     roundsStore.fetch();
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     roundsStore.fetch();
   }, []);
 

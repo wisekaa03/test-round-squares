@@ -9,35 +9,11 @@ import { authStore } from './auth';
 class GussStore {
   guss: TapResponse = { tap: 0, score: 0, roundScore: 0 };
 
-  startTime: dayjs.Dayjs | null = null;
-  endTime: dayjs.Dayjs | null = null;
-  startInterval: NodeJS.Timeout | null = null;
-  endInterval: NodeJS.Timeout | null = null;
-
   loading = false;
   errorGet: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  times() {
-    if (this.startTime) {
-      if (this.startInterval) {
-        clearInterval(this.startInterval);
-      }
-      this.startInterval = setInterval(() => {
-        this.startTime?.subtract(1, 'second');
-      }, 1000);
-    }
-    if (this.endTime) {
-      if (this.endInterval) {
-        clearInterval(this.endInterval);
-      }
-      this.endInterval = setInterval(() => {
-        this.endTime?.subtract(1, 'second');
-      }, 1000);
-    }
   }
 
   async getTap(roundId: string) {
@@ -47,10 +23,10 @@ class GussStore {
     try {
       const { data } = await swaggerApi.api.getTap({ roundId }, authStore.getAuthorization());
       runInAction(() => {
+        if (dayjs(data.startTime).isBefore()) {
+          setTimeout(() => this.getTap(roundId), dayjs(data.startTime).diff());
+        }
         this.guss = data;
-        this.startTime = dayjs(data.startTime);
-        this.endTime = dayjs(data.endTime);
-        this.times();
         this.loading = false;
       });
     } catch (error: unknown) {
@@ -71,9 +47,6 @@ class GussStore {
       const { data } = await swaggerApi.api.tap({ roundId }, authStore.getAuthorization());
       runInAction(() => {
         this.guss = data;
-        this.startTime = dayjs(data.startTime);
-        this.endTime = dayjs(data.endTime);
-        this.times();
         this.loading = false;
       });
     } catch (error: unknown) {
