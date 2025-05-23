@@ -117,6 +117,18 @@ export interface TapResponse {
    * @example "Активный / Завершен / Cooldown"
    */
   status?: string;
+  /**
+   * Время создания
+   * @format date-time
+   * @example "2021-01-01T00:00:00.000Z"
+   */
+  startTime?: string;
+  /**
+   * Время окончания
+   * @format date-time
+   * @example "2021-01-01T00:00:00.000Z"
+   */
+  endTime?: string;
 }
 
 export interface TapRequest {

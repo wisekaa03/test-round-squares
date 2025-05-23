@@ -55,6 +55,8 @@ export class TapService {
       roundScore: roundEntity?.roundScore || 0,
       winnerUserName: roundEntity?.winnerUserName,
       status: roundEntity?.status,
+      startTime: roundEntity?.startTime.toLocaleString('ru-RU'),
+      endTime: roundEntity?.endTime.toLocaleString('ru-RU'),
     };
   }
 
@@ -121,6 +123,8 @@ export class TapService {
       roundScore: roundEntity?.roundScore || 0,
       winnerUserName: roundEntity?.winnerUserName,
       status: roundEntity?.status,
+      startTime: roundEntity?.startTime.toLocaleString('ru-RU'),
+      endTime: roundEntity?.endTime.toLocaleString('ru-RU'),
     };
   }
 }

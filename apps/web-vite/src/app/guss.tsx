@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AppBar, Card, CardContent, CardMedia, Container, Divider, Grid, Toolbar } from '@mui/material';
+import { AppBar, Card, CardContent, CardMedia, Container, Grid, Toolbar } from '@mui/material';
 
 import { authStore } from '../store/auth';
 import { gussStore } from '../store/guss';
@@ -12,9 +12,6 @@ import { gussStore } from '../store/guss';
 const GussComponent = (props: { disableCustomTheme?: boolean }) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [firstString, setFirstString] = React.useState('');
-  const [secondString, setSecondString] = React.useState('');
-  const [thirdString, setThirdString] = React.useState('');
 
   React.useEffect(() => {
     if (!authStore.isLoggedIn) {
@@ -28,22 +25,22 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
     }
   }, [id]);
 
-  React.useMemo(() => {
-    const status = gussStore.guss.status;
-    if (status === 'Активный') {
-      setFirstString('Раунд активен!');
-      setSecondString('До конца осталось: ');
-      setThirdString(`Мои очки: ${gussStore.guss.score}`);
-    } else if (status === 'Cooldown') {
-      setFirstString('Cooldown');
-      setSecondString('До начала раунда осталось: ');
-      setThirdString('');
-    } else {
-      setFirstString(`Всего: ${gussStore.guss.roundScore}`);
-      setSecondString(`Победитель: ${gussStore.guss.winnerUserName || 'Не определен'}`);
-      setThirdString(`Мои очки: ${gussStore.guss.score}`);
-    }
-  }, []);
+  const { status, score, roundScore, winnerUserName, startTime, endTime } = gussStore.guss;
+  let firstString, secondString, thirdString;
+
+  if (status === 'Активный') {
+    firstString = 'Раунд активен!';
+    secondString = `До конца осталось: ${endTime}`;
+    thirdString = `Мои очки: ${score}`;
+  } else if (status === 'Cooldown') {
+    firstString = 'Cooldown';
+    secondString = `До начала раунда осталось: ${startTime}`;
+    thirdString = '';
+  } else {
+    firstString = `Всего: ${roundScore}`;
+    secondString = `Победитель: ${winnerUserName || 'Не определен'}`;
+    thirdString = `Мои очки: ${score}`;
+  }
 
   const tap = () => {
     if (id) {
@@ -57,7 +54,7 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { sx: 'none', sm: 'block' } }}>
-            {gussStore.guss.status}
+            {status}
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block ' } }}>{authStore.user?.name}</Box>
         </Toolbar>

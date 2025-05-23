@@ -37,4 +37,22 @@ export class TapResponse {
     required: false,
   })
   status?: string;
+
+  @ApiProperty({
+    description: 'Время создания',
+    example: '2021-01-01T00:00:00.000Z',
+    type: 'string',
+    format: 'date-time',
+    required: false,
+  })
+  startTime?: string;
+
+  @ApiProperty({
+    description: 'Время окончания',
+    example: '2021-01-01T00:00:00.000Z',
+    type: 'string',
+    format: 'date-time',
+    required: false,
+  })
+  endTime?: string;
 }
