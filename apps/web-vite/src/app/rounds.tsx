@@ -44,10 +44,6 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
     roundsStore.fetch();
   }, []);
 
-  const theLastOfGuss = (event: React.SyntheticEvent) => {
-    console.log(event.currentTarget.attributes.getNamedItem('id')?.value);
-  };
-
   return (
     <Box>
       <CssBaseline />
@@ -85,7 +81,11 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
       {!roundsStore.loading &&
         !roundsStore.errorRounds &&
         roundsStore.rounds.map((round) => (
-          <Paper id={round.id} key={round.id} onClick={theLastOfGuss} sx={{ cursor: 'pointer', my: 2, margin: '12pt' }}>
+          <Paper
+            key={round.id}
+            onClick={() => navigate(`/guss/${round.id}`)}
+            sx={{ cursor: 'pointer', my: 2, margin: '12pt' }}
+          >
             <Card>
               <Typography>Round ID: {round.id}</Typography>
               <Typography>Start: {round.startTime}</Typography>
