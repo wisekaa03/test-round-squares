@@ -31,7 +31,11 @@ export class UserEntity {
   password?: string;
 
   @Column({ type: 'varchar', nullable: false, comment: 'Роль пользователя' })
-  @ApiHideProperty()
+  @ApiProperty({
+    description: 'Роль пользователя',
+    type: 'string',
+    required: true,
+  })
   role!: string;
 
   @CreateDateColumn({ type: 'timestamptz' })

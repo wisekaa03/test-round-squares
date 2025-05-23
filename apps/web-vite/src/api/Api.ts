@@ -36,6 +36,8 @@ export interface User {
    * @example "John"
    */
   name: string;
+  /** Роль пользователя */
+  role: string;
   /**
    * Время создания
    * @format date-time
@@ -150,11 +152,8 @@ export interface RoundWinner {
   tapScore: number;
   /** Сколько очков в раунде */
   roundScore: number;
-}
-
-export interface Rounds {
-  /** Список раундов */
-  data: RoundWinner[];
+  /** Статус раунда */
+  status: string;
 }
 
 export interface Round {
@@ -479,7 +478,7 @@ export class Api<
         | NotAcceptableException
         | ConflictException
         | InternalServerErrorException
-        | Rounds
+        | RoundWinner[]
       >({
         path: `/api/round`,
         method: "GET",

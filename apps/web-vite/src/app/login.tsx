@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+import { AxiosError } from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -57,16 +58,17 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 
 const LoginComponent = (props: { disableCustomTheme?: boolean }) => {
   const navigate = useNavigate();
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [onLoading, setOnLoading] = React.useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    if (nameError || passwordError) {
-      return;
+  React.useEffect(() => {
+    if (authStore.isLoggedIn) {
+      navigate('/rounds');
     }
+  }, [navigate]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setOnLoading(true);
     event.preventDefault();
 
@@ -74,31 +76,25 @@ const LoginComponent = (props: { disableCustomTheme?: boolean }) => {
     const name = data.get('name') as string;
     const password = data.get('password') as string;
     try {
-      const { data } = await swaggerApi.api.authLogin({ name, password });
-      authStore.login(data);
-      navigate('/round');
-    } catch (error) {
+      const loginResponse = await swaggerApi.api.authLogin({ name, password });
+      authStore.login(loginResponse.data);
+      navigate('/rounds');
+    } catch (error: unknown) {
       setPasswordError(true);
-      setPasswordErrorMessage('Неверный пароль.');
+      if (error instanceof AxiosError) {
+        setPasswordErrorMessage(error.response?.data?.message ?? 'Неверный пароль.');
+      } else {
+        setPasswordErrorMessage('Неверный пароль.');
+      }
     } finally {
       setOnLoading(false);
     }
   };
 
   const validateInputs = () => {
-    const name = document.getElementById('name') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
 
     let isValid = true;
-
-    if (!name.value) {
-      setNameError(true);
-      setNameErrorMessage('Пожалуйста введите имя.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
-    }
 
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
@@ -134,8 +130,7 @@ const LoginComponent = (props: { disableCustomTheme?: boolean }) => {
           <FormControl>
             <FormLabel htmlFor="name">Имя</FormLabel>
             <TextField
-              error={nameError}
-              helperText={nameErrorMessage}
+              error={!!passwordError}
               id="name"
               type="name"
               name="name"
@@ -145,7 +140,7 @@ const LoginComponent = (props: { disableCustomTheme?: boolean }) => {
               required
               fullWidth
               variant="outlined"
-              color={nameError ? 'error' : 'primary'}
+              color={'primary'}
             />
           </FormControl>
           <FormControl>
@@ -165,7 +160,18 @@ const LoginComponent = (props: { disableCustomTheme?: boolean }) => {
               color={passwordError ? 'error' : 'primary'}
             />
           </FormControl>
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Запомнить меня" />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={authStore.rememberMe}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  authStore.setRememberMe(event.target.checked);
+                }}
+                color="primary"
+              />
+            }
+            label="Запомнить меня"
+          />
           <Button type="submit" loading={onLoading} fullWidth variant="contained" onClick={validateInputs}>
             Войти
           </Button>

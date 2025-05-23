@@ -1,7 +1,8 @@
 import { Api } from './Api';
+import { backendServer } from './constants';
 
 export const swaggerApi = new Api({
-  baseURL: `${import.meta.env.HTTP_API}://${import.meta.env.HOST_API}:${import.meta.env.PORT_API}`,
+  baseURL: backendServer,
   timeout: 10000,
   headers: {
     'content-type': 'application/json',

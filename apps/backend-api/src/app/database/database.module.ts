@@ -8,6 +8,7 @@ import { RoundEntity } from './round.entity';
 import { TapEntity } from './tap.entity';
 import { TypeOrmOptionsClass } from './database.options';
 import { RoundViewEntity } from './round.view';
+import { RoundSubscriber } from './round.subsciber';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { RoundViewEntity } from './round.view';
       inject: [ConfigService],
     }),
 
-    TypeOrmModule.forFeature([UserEntity, RoundEntity, TapEntity, RoundViewEntity]),
+    TypeOrmModule.forFeature([UserEntity, RoundEntity, TapEntity, RoundViewEntity, RoundSubscriber]),
   ],
+  providers: [RoundSubscriber],
   exports: [TypeOrmModule],
 })
 export class DatabaseModule implements OnModuleInit {

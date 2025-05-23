@@ -7,6 +7,7 @@ import { UserEntity } from './user.entity';
 import { TapEntity } from './tap.entity';
 import { RoundEntity } from './round.entity';
 import { RoundViewEntity } from './round.view';
+import { RoundSubscriber } from './round.subsciber';
 
 @Injectable()
 export class TypeOrmOptionsClass implements TypeOrmOptionsFactory {
@@ -27,7 +28,7 @@ export class TypeOrmOptionsClass implements TypeOrmOptionsFactory {
       logging: !!logLevel,
       logger: logLevel ? 'advanced-console' : undefined,
       synchronize: true,
-      entities: [UserEntity, TapEntity, RoundEntity, RoundViewEntity],
+      entities: [UserEntity, TapEntity, RoundEntity, RoundViewEntity, RoundSubscriber],
       migrations: [`${pathResolve(__dirname, '..')}/migrations/*.{ts,js}`],
       migrationsRun: false,
       autoLoadEntities: true,

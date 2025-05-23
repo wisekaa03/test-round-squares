@@ -101,4 +101,10 @@ export class RoundViewEntity {
     required: true,
   })
   roundScore!: number;
+
+  @ApiProperty({
+    description: 'Статус раунда',
+    required: true,
+  })
+  status!: string;
 }

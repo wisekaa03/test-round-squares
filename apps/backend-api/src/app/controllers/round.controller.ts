@@ -1,6 +1,6 @@
 import { Get, Logger, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Round, Rounds } from '@api/dto';
+import { Round, RoundWinner } from '@api/dto';
 import { RoundService } from '@api/services/round.service';
 import { ApiComplex, Roles } from '@api/decorators';
 import { JwtAuthGuard, RolesGuard } from '@api/guards';
@@ -18,14 +18,11 @@ export class RoundController {
   })
   @ApiResponse({
     description: 'Успешный ответ',
-    type: Rounds,
+    type: RoundWinner,
+    isArray: true,
   })
-  async getRound(): Promise<Rounds> {
-    const data = await this.roundService.find();
-
-    return {
-      data,
-    };
+  async getRound(): Promise<RoundWinner[]> {
+    return this.roundService.find();
   }
 
   @Post()

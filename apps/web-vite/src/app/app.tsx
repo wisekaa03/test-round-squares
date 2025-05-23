@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './login';
-import { Round } from './round';
-import { Guss } from './guss';
+import { Rounds } from './rounds';
 
 export function App() {
   return (
@@ -9,8 +8,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/round" element={<Round />} />
-        <Route path="/guss" element={<Guss />} />
+        <Route path="/rounds" element={<Rounds />} />
       </Routes>
     </BrowserRouter>
   );

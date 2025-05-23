@@ -33,7 +33,7 @@ export class RoundService {
   }
 
   async find() {
-    return this.roundViewRepository.find();
+    return this.roundViewRepository.find({ order: { startTime: 'DESC' } });
   }
 
   async start() {
