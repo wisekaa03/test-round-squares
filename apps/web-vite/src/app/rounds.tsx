@@ -71,7 +71,11 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
           </Button>
         </Paper>
       ) : null}
-      {roundsStore.loading && <CircularProgress />}
+      {roundsStore.loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, margin: '12pt' }}>
+          <CircularProgress />
+        </Box>
+      )}
       {roundsStore.errorRounds && (
         <Paper sx={{ my: 2, margin: '12pt' }}>
           <Alert severity="error">{roundsStore.errorRounds}</Alert>
