@@ -26,6 +26,15 @@ export class TapResponse {
     description: 'Победитель в раунде',
     type: 'string',
     example: 'John',
+    required: false,
   })
-  winnerUserName!: string;
+  winnerUserName?: string;
+
+  @ApiProperty({
+    description: 'Статус',
+    type: 'string',
+    example: 'Активный / Завершен / Cooldown',
+    required: false,
+  })
+  status?: string;
 }

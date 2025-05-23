@@ -91,14 +91,6 @@ export interface AuthResponse {
   data: User;
 }
 
-export interface TapRequest {
-  /**
-   * Раунд ID
-   * @format uuid
-   */
-  roundId: string;
-}
-
 export interface TapResponse {
   /**
    * Количество тапов
@@ -115,6 +107,24 @@ export interface TapResponse {
    * @example 1
    */
   roundScore: number;
+  /**
+   * Победитель в раунде
+   * @example "John"
+   */
+  winnerUserName?: string;
+  /**
+   * Статус
+   * @example "Активный / Завершен / Cooldown"
+   */
+  status?: string;
+}
+
+export interface TapRequest {
+  /**
+   * Раунд ID
+   * @format uuid
+   */
+  roundId: string;
 }
 
 export interface RoundWinner {
@@ -427,6 +437,39 @@ export class Api<
         body: data,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags tap
+     * @name GetTap
+     * @summary Получить тапы
+     * @request GET:/api/tap
+     * @secure
+     */
+    getTap: (
+      query: {
+        roundId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        | BadRequestException
+        | UnauthorizedException
+        | ForbiddenException
+        | NotFoundException
+        | NotAcceptableException
+        | ConflictException
+        | InternalServerErrorException
+        | TapResponse
+      >({
+        path: `/api/tap`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 

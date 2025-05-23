@@ -53,7 +53,8 @@ export class TapService {
       tap: tapEntity?.tap || 0,
       score: tapEntity?.score || 0,
       roundScore: roundEntity?.roundScore || 0,
-      winnerUserName: roundEntity?.winnerUserName || '',
+      winnerUserName: roundEntity?.winnerUserName,
+      status: roundEntity?.status,
     };
   }
 
@@ -109,14 +110,17 @@ export class TapService {
 
       return trans.findOne(TapEntity, {
         where: { roundId: update.roundId, userId: user.id },
-        relations: { round: true },
         select: { id: true, tap: true, score: true, round: { id: true, score: true } },
       });
     });
-    if (!tapEntity) {
-      throw new InternalServerErrorException('Тап не найден');
-    }
+    const roundEntity = await this.roundService.findById(update.roundId);
 
-    return { tap: tapEntity.tap, score: tapEntity.score, roundScore: tapEntity.round?.score || 0, winnerUserName: '' };
+    return {
+      tap: tapEntity?.tap || 0,
+      score: tapEntity?.score || 0,
+      roundScore: roundEntity?.roundScore || 0,
+      winnerUserName: roundEntity?.winnerUserName,
+      status: roundEntity?.status,
+    };
   }
 }
