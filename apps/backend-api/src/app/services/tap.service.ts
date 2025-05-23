@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import 'dayjs/plugin/utc';
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
@@ -55,8 +55,8 @@ export class TapService {
       roundScore: roundEntity?.roundScore || 0,
       winnerUserName: roundEntity?.winnerUserName,
       status: roundEntity?.status,
-      startTime: roundEntity?.startTime.toLocaleString('ru-RU'),
-      endTime: roundEntity?.endTime.toLocaleString('ru-RU'),
+      startTime: roundEntity?.startTime.toISOString(),
+      endTime: roundEntity?.endTime.toISOString(),
     };
   }
 
@@ -123,8 +123,8 @@ export class TapService {
       roundScore: roundEntity?.roundScore || 0,
       winnerUserName: roundEntity?.winnerUserName,
       status: roundEntity?.status,
-      startTime: roundEntity?.startTime.toLocaleString('ru-RU'),
-      endTime: roundEntity?.endTime.toLocaleString('ru-RU'),
+      startTime: roundEntity?.startTime.toISOString(),
+      endTime: roundEntity?.endTime.toISOString(),
     };
   }
 }

@@ -25,16 +25,17 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
     }
   }, [id]);
 
-  const { status, score, roundScore, winnerUserName, startTime, endTime } = gussStore.guss;
+  const { status, score, roundScore, winnerUserName } = gussStore.guss;
+  const { startTime, endTime } = gussStore;
   let firstString, secondString, thirdString;
 
   if (status === 'Активный') {
     firstString = 'Раунд активен!';
-    secondString = `До конца осталось: ${endTime}`;
+    secondString = `До конца осталось: ${endTime?.toDate().toLocaleString('ru-RU')}`;
     thirdString = `Мои очки: ${score}`;
   } else if (status === 'Cooldown') {
     firstString = 'Cooldown';
-    secondString = `До начала раунда осталось: ${startTime}`;
+    secondString = `До начала раунда осталось: ${startTime?.toDate().toLocaleString('ru-RU')}`;
     thirdString = '';
   } else {
     firstString = `Всего: ${roundScore}`;
