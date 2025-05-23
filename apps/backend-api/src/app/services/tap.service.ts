@@ -9,6 +9,7 @@ import { TapRequest, TapResponse } from '@api/dto';
 import { TapEntity } from '@api/database/tap.entity';
 import { UserEntity } from '@api/database/user.entity';
 import { RoundEntity } from '@api/database/round.entity';
+import { RoundService } from './round.service';
 
 dayjs.extend(require('dayjs/plugin/utc'));
 
@@ -21,6 +22,7 @@ export class TapService {
 
   constructor(
     private readonly configService: ConfigService,
+    public readonly roundService: RoundService,
     @InjectRepository(TapEntity)
     public readonly tapRepository: Repository<TapEntity>,
   ) {}
@@ -33,6 +35,26 @@ export class TapService {
     return this.tapRepository.findOneBy({
       id,
     });
+  }
+
+  /**
+   * Получаем статистику по тапам
+   * @param {UserEntity} user - Пользователь
+   * @returns {TapResponse} - Ответ на запрос
+   */
+  async getTap(user: UserEntity, roundId: string): Promise<TapResponse> {
+    const tapEntity = await this.tapRepository.findOne({
+      where: { roundId, userId: user.id },
+      select: { id: true, tap: true, score: true, round: { id: true, score: true } },
+    });
+    const roundEntity = await this.roundService.findById(roundId);
+
+    return {
+      tap: tapEntity?.tap || 0,
+      score: tapEntity?.score || 0,
+      roundScore: roundEntity?.roundScore || 0,
+      winnerUserName: roundEntity?.winnerUserName || '',
+    };
   }
 
   /**
@@ -95,6 +117,6 @@ export class TapService {
       throw new InternalServerErrorException('Тап не найден');
     }
 
-    return { tap: tapEntity.tap, score: tapEntity.score, roundScore: tapEntity.round?.score || 0 };
+    return { tap: tapEntity.tap, score: tapEntity.score, roundScore: tapEntity.round?.score || 0, winnerUserName: '' };
   }
 }

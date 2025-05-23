@@ -21,4 +21,11 @@ export class TapResponse {
     example: 1,
   })
   roundScore!: number;
+
+  @ApiProperty({
+    description: 'Победитель в раунде',
+    type: 'string',
+    example: 'John',
+  })
+  winnerUserName!: string;
 }

@@ -22,12 +22,12 @@ export class RoundService {
     public readonly roundViewRepository: Repository<RoundViewEntity>,
   ) {}
 
-  async findOne(options: FindOneOptions<RoundEntity>) {
-    return this.roundRepository.findOne(options);
+  async findOne(options: FindOneOptions<RoundViewEntity>) {
+    return this.roundViewRepository.findOne(options);
   }
 
   async findById(id: string) {
-    return this.roundRepository.findOneBy({
+    return this.roundViewRepository.findOneBy({
       id,
     });
   }

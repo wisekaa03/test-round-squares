@@ -1,4 +1,4 @@
-import { Body, Logger, Post, Req, UnauthorizedException } from '@nestjs/common';
+import { Body, Get, Logger, ParseUUIDPipe, Post, Query, Req, UnauthorizedException } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 
@@ -11,6 +11,19 @@ export class TapController {
   private readonly logger = new Logger(TapController.name);
 
   constructor(private readonly tapService: TapService) {}
+
+  @Get()
+  @ApiOperation({ operationId: 'getTap', summary: 'Получить тапы' })
+  @ApiResponse({ description: 'Успешный ответ', type: TapResponse })
+  async getTap(
+    @Req() { user }: FastifyRequest,
+    @Query('roundId', ParseUUIDPipe) roundId: string,
+  ): Promise<TapResponse> {
+    if (!user) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
+    return this.tapService.getTap(user, roundId);
+  }
 
   @Post()
   @ApiOperation({
