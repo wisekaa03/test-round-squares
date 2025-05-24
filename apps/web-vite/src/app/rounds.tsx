@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Alert, AppBar, CircularProgress, Paper, Snackbar, Toolbar } from '@mui/material';
+import { Alert, AppBar, Paper, Snackbar, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import CssBaseline from '@mui/material/CssBaseline';
