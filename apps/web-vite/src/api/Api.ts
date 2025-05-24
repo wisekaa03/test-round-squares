@@ -10,6 +10,13 @@
  * ---------------------------------------------------------------
  */
 
+/** Статус раунда */
+export enum StatusLog {
+  ValueАктивный = "Активный",
+  Cooldown = "Cooldown",
+  ValueЗавершенный = "Завершенный",
+}
+
 export type BadRequestException = object;
 
 export type UnauthorizedException = object;
@@ -158,6 +165,18 @@ export interface RoundWinner {
    */
   endTime: string;
   /**
+   * Время создания
+   * @format date-time
+   * @example "2021-01-01T00:00:00.000Z"
+   */
+  createdAt: string;
+  /**
+   * Время изменения
+   * @format date-time
+   * @example "2021-01-01T00:00:00.000Z"
+   */
+  updatedAt: string;
+  /**
    * Идентификатор победителя
    * @format uuid
    */
@@ -175,7 +194,7 @@ export interface RoundWinner {
   /** Сколько очков в раунде */
   roundScore: number;
   /** Статус раунда */
-  status: string;
+  status: StatusLog;
 }
 
 export interface Round {

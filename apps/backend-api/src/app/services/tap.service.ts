@@ -1,17 +1,14 @@
-import dayjs from 'dayjs';
-import 'dayjs/plugin/utc';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
 import { TapRequest, TapResponse } from '@api/dto';
+import dayjs from '@api/interfaces/dayjs-setup';
 import { TapEntity } from '@api/database/tap.entity';
 import { UserEntity } from '@api/database/user.entity';
 import { RoundEntity } from '@api/database/round.entity';
 import { RoundService } from './round.service';
-
-dayjs.extend(require('dayjs/plugin/utc'));
 
 @Injectable()
 export class TapService {
@@ -69,7 +66,7 @@ export class TapService {
    */
   async tap(user: UserEntity, update: TapRequest): Promise<TapResponse> {
     const nikita = user.role === 'nikita';
-    const dateNow = dayjs().utc(false).toDate();
+    const dateNow = dayjs().toDate();
 
     const tapEntity = await this.tapRepository.manager.transaction(async (trans) => {
       const roundFind = await trans.findOne(RoundEntity, {

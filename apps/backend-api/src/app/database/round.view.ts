@@ -4,6 +4,7 @@ import { DataSource, SelectQueryBuilder, ViewColumn, ViewEntity } from 'typeorm'
 import { RoundEntity } from './round.entity';
 import { TapEntity } from './tap.entity';
 import { UserEntity } from './user.entity';
+import { StatusLog } from '@api/enums/statoslog.enum';
 
 @ViewEntity({
   name: 'roundWinner',
@@ -66,6 +67,26 @@ export class RoundViewEntity {
 
   @ViewColumn()
   @ApiProperty({
+    description: 'Время создания',
+    example: '2021-01-01T00:00:00.000Z',
+    type: 'string',
+    format: 'date-time',
+    required: true,
+  })
+  createdAt!: Date;
+
+  @ViewColumn()
+  @ApiProperty({
+    description: 'Время изменения',
+    example: '2021-01-01T00:00:00.000Z',
+    type: 'string',
+    format: 'date-time',
+    required: true,
+  })
+  updatedAt!: Date;
+
+  @ViewColumn()
+  @ApiProperty({
     description: 'Идентификатор победителя',
     format: 'uuid',
     required: true,
@@ -104,7 +125,9 @@ export class RoundViewEntity {
 
   @ApiProperty({
     description: 'Статус раунда',
+    enum: StatusLog,
+    enumName: 'StatusLog',
     required: true,
   })
-  status!: string;
+  status!: StatusLog;
 }

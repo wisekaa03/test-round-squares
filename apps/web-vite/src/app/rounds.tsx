@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Alert, AppBar, CircularProgress, Paper, Toolbar } from '@mui/material';
+import { Alert, AppBar, CircularProgress, Paper, Snackbar, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
 
-import { authStore } from '../store/auth';
-import { roundsStore } from '../store/rounds';
+import { authStore } from '../store/authStore';
+import { roundsStore } from '../store/roundsStore';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -33,7 +33,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
     if (!authStore.isLoggedIn) {
       navigate('/login');
     }
-  }, [navigate]);
+  }, [authStore.isLoggedIn, navigate]);
 
   const roundStart = async () => {
     await roundsStore.start();
@@ -41,7 +41,9 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
   };
 
   useEffect(() => {
-    roundsStore.fetch();
+    if (!roundsStore.loading) {
+      roundsStore.fetch();
+    }
   }, []);
 
   return (
@@ -71,15 +73,14 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
           </Button>
         </Paper>
       ) : null}
-      {roundsStore.loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, margin: '12pt' }}>
-          <CircularProgress />
-        </Box>
-      )}
       {roundsStore.errorRounds && (
-        <Paper sx={{ my: 2, margin: '12pt' }}>
+        <Snackbar
+          open={!!roundsStore.errorRounds}
+          autoHideDuration={3000}
+          onClose={() => (roundsStore.errorRounds = null)}
+        >
           <Alert severity="error">{roundsStore.errorRounds}</Alert>
-        </Paper>
+        </Snackbar>
       )}
 
       {!roundsStore.loading &&
@@ -88,12 +89,16 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
           <Paper
             key={round.id}
             onClick={() => navigate(`/guss/${round.id}`)}
-            sx={{ cursor: 'pointer', my: 2, margin: '12pt' }}
+            sx={{
+              cursor: 'pointer',
+              my: 2,
+              mx: 2,
+            }}
           >
             <Card>
               <Typography>Round ID: {round.id}</Typography>
-              <Typography>Start: {round.startTime}</Typography>
-              <Typography>End: {round.endTime}</Typography>
+              <Typography>Начало: {round.startTime}</Typography>
+              <Typography>Конец: {round.endTime}</Typography>
               <Typography>Статус: {round.status}</Typography>
             </Card>
           </Paper>

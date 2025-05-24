@@ -1,9 +1,10 @@
 import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
+import dayjs from '../dayjs-setup';
 import { RoundWinner } from '../api/Api';
 import { swaggerApi } from '../api/api-instance';
-import { authStore } from './auth';
+import { authStore } from './authStore';
 
 class RoundStore {
   rounds: RoundWinner[] = [];
@@ -37,8 +38,8 @@ class RoundStore {
       runInAction(() => {
         this.rounds = (data as RoundWinner[]).map((round) => ({
           ...round,
-          startTime: new Date(round.startTime).toLocaleString('ru-RU'),
-          endTime: new Date(round.endTime).toLocaleString('ru-RU'),
+          startTime: dayjs(round.startTime).format('DD.MM.YYYY HH:mm:ss'),
+          endTime: dayjs(round.endTime).format('DD.MM.YYYY HH:mm:ss'),
         }));
         this.loading = false;
       });

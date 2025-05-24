@@ -1,11 +1,9 @@
-import dayjs from 'dayjs';
-import 'dayjs/plugin/utc';
 import { DataSource, EntitySubscriberInterface, EventSubscriber } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
+import dayjs from '@api/interfaces/dayjs-setup';
 import { RoundViewEntity } from './round.view';
-
-dayjs.extend(require('dayjs/plugin/utc'));
+import { StatusLog } from '@api/enums/statoslog.enum';
 
 @EventSubscriber()
 export class RoundSubscriber implements EntitySubscriberInterface<RoundViewEntity> {
@@ -23,14 +21,18 @@ export class RoundSubscriber implements EntitySubscriberInterface<RoundViewEntit
   }
 
   entity(entity: RoundViewEntity) {
-    const dateNow = dayjs().utc(false).toDate();
-    const dateCooldownNow = dayjs().utc(false).subtract(this.COOLDOWN_DURATION).toDate();
-    if (entity.startTime > dateCooldownNow) {
-      entity.status = 'Cooldown';
-    } else if (entity.endTime >= dateNow && entity.startTime <= dateNow) {
-      entity.status = 'Активный';
+    const dateCooldownNow = dayjs(entity.startTime).subtract(this.COOLDOWN_DURATION);
+    const startTime = dayjs(entity.startTime);
+    const endTime = dayjs(entity.endTime);
+    const now = dayjs();
+    const beforeStart = startTime.isBefore(now);
+    const afterEnd = endTime.isAfter(now);
+    if (beforeStart && afterEnd) {
+      entity.status = StatusLog.Active;
+    } else if (dateCooldownNow.isBefore(now) && afterEnd) {
+      entity.status = StatusLog.Cooldown;
     } else {
-      entity.status = 'Завершенный';
+      entity.status = StatusLog.Finished;
     }
   }
 

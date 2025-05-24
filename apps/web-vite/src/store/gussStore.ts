@@ -4,58 +4,71 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { TapResponse } from '../api/Api';
 import { swaggerApi } from '../api/api-instance';
-import { authStore } from './auth';
+import { authStore } from './authStore';
 
 class GussStore {
-  guss: TapResponse = { tap: 0, score: 0, roundScore: 0 };
-
-  loading = false;
+  guss: TapResponse | null = null;
   errorGet: string | null = null;
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
   async getTap(roundId: string) {
-    this.loading = true;
     this.errorGet = null;
+
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+    }
 
     try {
       const { data } = await swaggerApi.api.getTap({ roundId }, authStore.getAuthorization());
+
       runInAction(() => {
-        if (dayjs(data.startTime).isBefore()) {
-          setTimeout(() => this.getTap(roundId), dayjs(data.startTime).diff());
-        }
         this.guss = data;
-        this.loading = false;
       });
+
+      const now = dayjs();
+      const start = dayjs(data.startTime);
+      const end = dayjs(data.endTime);
+
+      if (start.isAfter(now) || end.isAfter(now)) {
+        const delay = start.diff(now) < 0 ? end.diff(now) : start.diff(now);
+
+        this.timeoutId = setTimeout(() => this.getTap(roundId), delay);
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         runInAction(() => {
           this.errorGet = error.response?.data?.message ?? 'Не удалось получить очки';
-          this.loading = false;
         });
       }
     }
   }
 
   async tap(roundId: string) {
-    this.loading = true;
     this.errorGet = null;
 
     try {
       const { data } = await swaggerApi.api.tap({ roundId }, authStore.getAuthorization());
       runInAction(() => {
         this.guss = data;
-        this.loading = false;
       });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         runInAction(() => {
           this.errorGet = error.response?.data?.message ?? 'Не удалось получить очки';
-          this.loading = false;
         });
       }
+    }
+  }
+
+  clearTimer() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
     }
   }
 }

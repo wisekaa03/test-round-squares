@@ -16,7 +16,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
 
 import { swaggerApi } from '../api/api-instance';
-import { authStore } from '../store/auth';
+import { authStore } from '../store/authStore';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

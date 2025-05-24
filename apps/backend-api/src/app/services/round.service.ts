@@ -2,8 +2,8 @@ import { FindOneOptions, Repository, type DeepPartial } from 'typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import dayjs from 'dayjs';
 
+import dayjs from '@api/interfaces/dayjs-setup';
 import { RoundEntity } from '@api/database/round.entity';
 import { RoundViewEntity } from '@api/database/round.view';
 
