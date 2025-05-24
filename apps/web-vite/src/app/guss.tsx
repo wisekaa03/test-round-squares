@@ -50,7 +50,7 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
   }
 
   return (
-    <Box sx={{ height: '100vh' }}>
+    <Container sx={{ height: '100vh' }}>
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
@@ -60,7 +60,7 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{authStore.user?.name}</Box>
         </Toolbar>
       </AppBar>
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10vh' }}>
         <Grid container direction="column" sx={{ justifyContent: 'center', alignItems: 'center' }}>
           <Card sx={{ maxWidth: 545, width: 545 }}>
             <CardMedia
@@ -86,8 +86,8 @@ const GussComponent = (props: { disableCustomTheme?: boolean }) => {
             </CardContent>
           </Card>
         </Grid>
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 };
 

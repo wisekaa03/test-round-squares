@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { Alert, AppBar, Paper, Snackbar, Toolbar } from '@mui/material';
+import { Alert, AppBar, Container, Paper, Snackbar, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -47,7 +47,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
   }, []);
 
   return (
-    <Box>
+    <Container>
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
@@ -58,7 +58,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
         </Toolbar>
       </AppBar>
       {authStore.isAdmin && !!roundsStore.errorStart ? (
-        <Paper sx={{ my: 2, margin: '12pt' }}>
+        <Paper sx={{ my: 2 }}>
           <Button fullWidth size="large" variant="text" sx={{ justifyContent: 'space-between' }} onClick={roundStart}>
             <Typography sx={{ padding: '6px', justifyContent: 'left' }}>Создать раунд</Typography>
             <Alert severity="error" sx={{ padding: '0 6px' }}>
@@ -67,7 +67,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
           </Button>
         </Paper>
       ) : authStore.isAdmin ? (
-        <Paper sx={{ my: 2, margin: '12pt' }}>
+        <Paper sx={{ my: 2 }}>
           <Button fullWidth size="large" variant="text" sx={{ justifyContent: 'space-between' }} onClick={roundStart}>
             <Typography sx={{ padding: '6px', justifyContent: 'left' }}>Создать раунд</Typography>
           </Button>
@@ -92,7 +92,6 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
             sx={{
               cursor: 'pointer',
               my: 2,
-              mx: 2,
             }}
           >
             <Card>
@@ -103,7 +102,7 @@ const RoundsComponent = (props: { disableCustomTheme?: boolean }) => {
             </Card>
           </Paper>
         ))}
-    </Box>
+    </Container>
   );
 };
 
